@@ -1,0 +1,82 @@
+// ==================================================
+// Noice Midnight Ember - Custom LESS Library
+// Drop-in replacement for userstyles.catppuccin.com/lib/lib.less
+// All colors from Noice.json by Hropiberhtaz
+// ==================================================
+
+#noice() {
+  .palette(@flavor) when (@flavor = noice) {
+    // Backgrounds
+    @base:        #121B2B; // bg_dark_blue
+    @mantle:      #0A0812; // bg_deeper
+    @crust:       #06050C; // bg_deepest
+
+    // Surfaces
+    @surface0:    #1F2335; // bg_medium_cool
+    @surface1:    #292A41; // bg_soft_cool
+    @surface2:    #2E3049; // surface_dark_cool
+
+    // Overlays
+    @overlay0:    #2C4A5C; // twilight_blue
+    @overlay1:    #4C6A7C; // twilight_blue_bright
+    @overlay2:    #5D75B5; // accent_navy
+
+    // Text
+    @text:        #E8F0FF; // text_primary_cool
+    @subtext1:    #B6CCF0; // detail_mist
+    @subtext0:    #9DA8D0; // text_muted_cool
+
+    // Accents
+    @rosewater:   #FFE5D9; // detail_pearl
+    @flamingo:    #F4A0C0; // aurora_pink_bright
+    @pink:        #D480A0; // aurora_pink
+    @mauve:       #E55A6B; // gem_ruby_bright (NOT purple - ember red)
+    @red:         #C93A4B; // gem_ruby
+    @maroon:      #AD2A39; // gem_ruby_deep
+    @peach:       #E3A56D; // gem_topaz
+    @yellow:      #F5CF57; // metal_gold_bright
+    @green:       #77C88A; // aurora_green_bright
+    @teal:        #6BB59A; // accent_emerald
+    @sky:         #A7E0FF; // detail_ice
+    @sapphire:    #6AAFCD; // aurora_blue_bright
+    @blue:        #8DC9FF; // accent_sky
+    @lavender:    #7AA5F0; // accent_corn
+  }
+}
+
+// Mirror Catppuccin's #lib namespace so existing styles work without changes
+#lib() {
+  .palette() {
+    #noice.palette(noice);
+  }
+
+  .defaults() {
+    @base:        #121B2B;
+    @mantle:      #0A0812;
+    @crust:       #06050C;
+    @surface0:    #1F2335;
+    @surface1:    #292A41;
+    @surface2:    #2E3049;
+    @overlay0:    #2C4A5C;
+    @overlay1:    #4C6A7C;
+    @overlay2:    #5D75B5;
+    @text:        #E8F0FF;
+    @subtext1:    #B6CCF0;
+    @subtext0:    #9DA8D0;
+    @rosewater:   #FFE5D9;
+    @flamingo:    #F4A0C0;
+    @pink:        #D480A0;
+    @mauve:       #E55A6B;
+    @red:         #C93A4B;
+    @maroon:      #AD2A39;
+    @peach:       #E3A56D;
+    @yellow:      #F5CF57;
+    @green:       #77C88A;
+    @teal:        #6BB59A;
+    @sky:         #A7E0FF;
+    @sapphire:    #6AAFCD;
+    @blue:        #8DC9FF;
+    @lavender:    #7AA5F0;
+    @accent:      @mauve;
+  }
+}
