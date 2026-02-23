@@ -1,5 +1,5 @@
 {
-  "name": "Hropiberhtaz Palette",
+  "name": "Hropiberhtaz Palette ",
   "description": "A complete warm, earthy palette with systematic gradients capable of recoloring any detailed image",
   "colors": [
     {
@@ -388,6 +388,13 @@
       "b": 148
     },
     {
+      "name": "subtext3",
+      "hex": "#eedab5",
+      "r": 238,
+      "g": 218,
+      "b": 181
+    },
+    {
       "name": "subtext2",
       "hex": "#e6cfaa",
       "r": 230,
@@ -407,6 +414,13 @@
       "r": 194,
       "g": 156,
       "b": 112
+    },
+    {
+      "name": "overlay4",
+      "hex": "#ccbcac",
+      "r": 204,
+      "g": 188,
+      "b": 172
     },
     {
       "name": "overlay3",
@@ -435,6 +449,13 @@
       "r": 122,
       "g": 104,
       "b": 86
+    },
+    {
+      "name": "surface4",
+      "hex": "#7c6854",
+      "r": 124,
+      "g": 104,
+      "b": 84
     },
     {
       "name": "surface3",
@@ -514,6 +535,13 @@
       "b": 60
     },
     {
+      "name": "accent_red_light",
+      "hex": "#e87a5c",
+      "r": 232,
+      "g": 122,
+      "b": 92
+    },
+    {
       "name": "accent_orange",
       "hex": "#eb9524",
       "r": 235,
@@ -521,11 +549,25 @@
       "b": 36
     },
     {
+      "name": "accent_orange_light",
+      "hex": "#f5aa44",
+      "r": 245,
+      "g": 170,
+      "b": 68
+    },
+    {
       "name": "accent_gold",
       "hex": "#d4b15c",
       "r": 212,
       "g": 177,
       "b": 92
+    },
+    {
+      "name": "accent_gold_light",
+      "hex": "#e2c47c",
+      "r": 226,
+      "g": 196,
+      "b": 124
     },
     {
       "name": "accent_amber",
@@ -556,6 +598,13 @@
       "b": 50
     },
     {
+      "name": "accent_clay_dark",
+      "hex": "#823e26",
+      "r": 130,
+      "g": 62,
+      "b": 38
+    },
+    {
       "name": "accent_blood",
       "hex": "#a31909",
       "r": 163,
@@ -575,6 +624,41 @@
       "r": 159,
       "g": 126,
       "b": 76
+    },
+    {
+      "name": "accent_bronze_light",
+      "hex": "#b89a68",
+      "r": 184,
+      "g": 154,
+      "b": 104
+    },
+    {
+      "name": "accent_umber",
+      "hex": "#8b5e3c",
+      "r": 139,
+      "g": 94,
+      "b": 60
+    },
+    {
+      "name": "accent_ochre",
+      "hex": "#b88a44",
+      "r": 184,
+      "g": 138,
+      "b": 68
+    },
+    {
+      "name": "accent_sienna",
+      "hex": "#a55e2c",
+      "r": 165,
+      "g": 94,
+      "b": 44
+    },
+    {
+      "name": "accent_sand",
+      "hex": "#dbbc8c",
+      "r": 219,
+      "g": 188,
+      "b": 140
     },
     {
       "name": "highlight_white",
@@ -603,6 +687,13 @@
       "r": 245,
       "g": 224,
       "b": 176
+    },
+    {
+      "name": "highlight_peach",
+      "hex": "#ffdec2",
+      "r": 255,
+      "g": 222,
+      "b": 194
     },
     {
       "name": "shadow_light",
