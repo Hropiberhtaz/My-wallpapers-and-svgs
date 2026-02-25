@@ -1,82 +1,458 @@
-// ==================================================
-// Noice Midnight Ember - Custom LESS Library
-// Drop-in replacement for userstyles.catppuccin.com/lib/lib.less
-// All colors from Noice.json by Hropiberhtaz
-// ==================================================
+// Hropiberhtaz's Palette
+// A custom Less variable library generated from Noice.json
+// -----------------------------------------------------------------------------
+// Background & Surface Colors
+// -----------------------------------------------------------------------------
 
-#noice() {
-  .palette(@flavor) when (@flavor = noice) {
-    // Backgrounds
-    @base:        #121B2B; // bg_dark_blue
-    @mantle:      #0A0812; // bg_deeper
-    @crust:       #06050C; // bg_deepest
+@bg-deep: #0F0D19;
+@bg-deeper: #0A0812;
+@bg-deepest: #06050C;
+@bg-dark: #1A1726;
+@bg-dark-warm: #1E1A24;
+@bg-dark-cool: #161928;
+@bg-dark-purple: #1A1429;
+@bg-dark-blue: #121B2B;
+@bg-dark-green: #141F1C;
+@bg-medium: #231F31;
+@bg-medium-warm: #282231;
+@bg-medium-cool: #1F2335;
+@bg-soft: #2D283D;
+@bg-soft-warm: #322B3D;
+@bg-soft-cool: #292A41;
+@surface-dark: #322D45;
+@surface-dark-warm: #383045;
+@surface-dark-cool: #2E3049;
+@surface: #3D3752;
+@surface-warm: #433A52;
+@surface-cool: #393956;
+@surface-light: #48425E;
+@surface-light-warm: #4E455E;
+@surface-light-cool: #444462;
 
-    // Surfaces
-    @surface0:    #1F2335; // bg_medium_cool
-    @surface1:    #292A41; // bg_soft_cool
-    @surface2:    #2E3049; // surface_dark_cool
+// -----------------------------------------------------------------------------
+// Text Colors
+// -----------------------------------------------------------------------------
 
-    // Overlays
-    @overlay0:    #2C4A5C; // twilight_blue
-    @overlay1:    #4C6A7C; // twilight_blue_bright
-    @overlay2:    #5D75B5; // accent_navy
+@text-primary: #F2E9FF;
+@text-primary-warm: #FFEDF5;
+@text-primary-cool: #E8F0FF;
+@text-primary-amber: #FFF5E5;
+@text-primary-mint: #E5FFF2;
+@text-soft: #DCD5F0;
+@text-soft-warm: #F0D8E8;
+@text-soft-cool: #D5E0F5;
+@text-soft-peach: #FFE0D9;
+@text-soft-lavender: #E8D9FF;
+@text-muted: #A69DC8;
+@text-muted-warm: #C9A8BA;
+@text-muted-cool: #9DA8D0;
 
-    // Text
-    @text:        #E8F0FF; // text_primary_cool
-    @subtext1:    #B6CCF0; // detail_mist
-    @subtext0:    #9DA8D0; // text_muted_cool
+// -----------------------------------------------------------------------------
+// Detail Colors
+// -----------------------------------------------------------------------------
 
-    // Accents
-    @rosewater:   #FFE5D9; // detail_pearl
-    @flamingo:    #F4A0C0; // aurora_pink_bright
-    @pink:        #D480A0; // aurora_pink
-    @mauve:       #E55A6B; // gem_ruby_bright (NOT purple - ember red)
-    @red:         #C93A4B; // gem_ruby
-    @maroon:      #AD2A39; // gem_ruby_deep
-    @peach:       #E3A56D; // gem_topaz
-    @yellow:      #F5CF57; // metal_gold_bright
-    @green:       #77C88A; // aurora_green_bright
-    @teal:        #6BB59A; // accent_emerald
-    @sky:         #A7E0FF; // detail_ice
-    @sapphire:    #6AAFCD; // aurora_blue_bright
-    @blue:        #8DC9FF; // accent_sky
-    @lavender:    #7AA5F0; // accent_corn
-  }
-}
+@detail-lavender: #CAB9FF;
+@detail-lavender-light: #E0D2FF;
+@detail-lavender-dim: #B09EE0;
+@detail-mist: #B6CCF0;
+@detail-mist-light: #D4E5FF;
+@detail-mist-dim: #9CB0D4;
+@detail-pearl: #FFE5D9;
+@detail-pearl-light: #FFF2E9;
+@detail-pearl-dim: #E5C9BB;
+@detail-ice: #A7E0FF;
+@detail-ice-light: #C2F0FF;
+@detail-ice-dim: #8CC0E0;
 
-// Mirror Catppuccin's #lib namespace so existing styles work without changes
-#lib() {
-  .palette() {
-    #noice.palette(noice);
-  }
+// -----------------------------------------------------------------------------
+// Accent Colors (Grouped by hue family)
+// -----------------------------------------------------------------------------
 
-  .defaults() {
-    @base:        #121B2B;
-    @mantle:      #0A0812;
-    @crust:       #06050C;
-    @surface0:    #1F2335;
-    @surface1:    #292A41;
-    @surface2:    #2E3049;
-    @overlay0:    #2C4A5C;
-    @overlay1:    #4C6A7C;
-    @overlay2:    #5D75B5;
-    @text:        #E8F0FF;
-    @subtext1:    #B6CCF0;
-    @subtext0:    #9DA8D0;
-    @rosewater:   #FFE5D9;
-    @flamingo:    #F4A0C0;
-    @pink:        #D480A0;
-    @mauve:       #E55A6B;
-    @red:         #C93A4B;
-    @maroon:      #AD2A39;
-    @peach:       #E3A56D;
-    @yellow:      #F5CF57;
-    @green:       #77C88A;
-    @teal:        #6BB59A;
-    @sky:         #A7E0FF;
-    @sapphire:    #6AAFCD;
-    @blue:        #8DC9FF;
-    @lavender:    #7AA5F0;
-    @accent:      @mauve;
-  }
-}
+// Lavender / Purple
+@accent-lavender: #B7A4FF;
+@accent-lavender-bright: #D5C2FF;
+@accent-lavender-deep: #9A86E0;
+@accent-lilac: #D0BDF2;
+@accent-lilac-bright: #E8D5FF;
+@accent-lilac-deep: #B39FD6;
+@accent-plum: #9F88D9;
+@accent-plum-bright: #B9A2F5;
+@accent-plum-deep: #8870C0;
+
+// Blue / Sky
+@accent-sky: #8DC9FF;
+@accent-sky-bright: #B0E0FF;
+@accent-sky-deep: #70ADE0;
+@accent-corn: #7AA5F0;
+@accent-corn-bright: #9CC2FF;
+@accent-corn-deep: #5F8AD4;
+@accent-navy: #5D75B5;
+@accent-navy-bright: #7C94D4;
+@accent-navy-deep: #455A99;
+
+// Green / Mint
+@accent-mint: #A2E3C4;
+@accent-mint-bright: #C2FFE0;
+@accent-mint-deep: #86C7A8;
+@accent-emerald: #6BB59A;
+@accent-emerald-bright: #8CD4B8;
+@accent-emerald-deep: #52997F;
+@accent-forest: #4A7A6E;
+@accent-forest-bright: #63998C;
+@accent-forest-deep: #376054;
+
+// Peach / Coral / Rose
+@accent-peach: #FFC7AF;
+@accent-peach-bright: #FFE2D2;
+@accent-peach-deep: #E5AA92;
+@accent-coral: #F5A88B;
+@accent-coral-bright: #FFC4AD;
+@accent-coral-deep: #D98C70;
+@accent-rose: #E59FB0;
+@accent-rose-bright: #FFC0D0;
+@accent-rose-deep: #C88494;
+
+// Gold / Bronze / Champagne
+@accent-champagne: #F5E1B5;
+@accent-champagne-bright: #FFF2D4;
+@accent-champagne-deep: #D9C599;
+@accent-bronze: #CCAA7A;
+@accent-bronze-bright: #E8C69C;
+@accent-bronze-deep: #B08E60;
+@accent-stone: #B0A9A0;
+@accent-stone-bright: #CCC5BC;
+@accent-stone-deep: #948D84;
+
+// -----------------------------------------------------------------------------
+// Gem Tones
+// -----------------------------------------------------------------------------
+
+@gem-amethyst: #C5A0D9;
+@gem-amethyst-bright: #E0C0F0;
+@gem-amethyst-deep: #A880C2;
+@gem-ruby: #C93A4B;
+@gem-ruby-bright: #E55A6B;
+@gem-ruby-deep: #AD2A39;
+@gem-sapphire: #2F4F7C;
+@gem-sapphire-bright: #4F6F9C;
+@gem-sapphire-deep: #1A3A60;
+@gem-emerald: #1F7A5C;
+@gem-emerald-bright: #3F9A7C;
+@gem-emerald-deep: #0A5A40;
+@gem-topaz: #E3A56D;
+@gem-topaz-bright: #FFC58D;
+@gem-topaz-deep: #C7874F;
+@gem-opal: #C7C2D4;
+@gem-opal-bright: #E5E0F0;
+@gem-opal-deep: #A9A4B8;
+
+// -----------------------------------------------------------------------------
+// Metal Tones
+// -----------------------------------------------------------------------------
+
+@metal-gold: #D4AF37;
+@metal-gold-bright: #F5CF57;
+@metal-gold-deep: #B08F1F;
+@metal-silver: #C0C0C0;
+@metal-silver-bright: #E0E0E0;
+@metal-silver-deep: #A0A0A0;
+@metal-copper: #B87333;
+@metal-copper-bright: #D89353;
+@metal-copper-deep: #9C551F;
+@metal-platinum: #E5E4E2;
+@metal-platinum-dim: #C5C4C2;
+@metal-rosegold: #B76E79;
+@metal-rosegold-bright: #D78E99;
+@metal-rosegold-deep: #9B525D;
+
+// -----------------------------------------------------------------------------
+// Earth Tones
+// -----------------------------------------------------------------------------
+
+@earth-clay: #A45D3C;
+@earth-clay-bright: #C47D5C;
+@earth-clay-deep: #884122;
+@earth-sienna: #A0522D;
+@earth-sienna-bright: #C0724D;
+@earth-sienna-deep: #843A1C;
+@earth-umber: #635147;
+@earth-umber-bright: #837167;
+@earth-umber-deep: #47352B;
+@earth-ochre: #CC7722;
+@earth-ochre-bright: #EC9742;
+@earth-ochre-deep: #B05D10;
+@earth-terra: #D2691E;
+@earth-terra-bright: #F2893E;
+@earth-terra-deep: #B64D10;
+
+// -----------------------------------------------------------------------------
+// Twilight / Atmospheric
+// -----------------------------------------------------------------------------
+
+@twilight-purple: #573E5A;
+@twilight-purple-bright: #775E7A;
+@twilight-purple-deep: #3B263E;
+@twilight-blue: #2C4A5C;
+@twilight-blue-bright: #4C6A7C;
+@twilight-blue-deep: #183040;
+@twilight-pink: #A65B6F;
+@twilight-pink-bright: #C67B8F;
+@twilight-pink-deep: #8A3F53;
+@twilight-gold: #A6875A;
+@twilight-gold-bright: #C6A77A;
+@twilight-gold-deep: #8A6B3E;
+
+// -----------------------------------------------------------------------------
+// Aurora
+// -----------------------------------------------------------------------------
+
+@aurora-green: #57A86A;
+@aurora-green-bright: #77C88A;
+@aurora-green-deep: #3B8C4E;
+@aurora-blue: #4A8FAD;
+@aurora-blue-bright: #6AAFCD;
+@aurora-blue-deep: #2E7391;
+@aurora-pink: #D480A0;
+@aurora-pink-bright: #F4A0C0;
+@aurora-pink-deep: #B86484;
+
+// -----------------------------------------------------------------------------
+// Neutrals
+// -----------------------------------------------------------------------------
+
+@neutral-white: #FFFFFF;
+@neutral-offwhite: #FAFAFA;
+@neutral-light: #E8E6F0;
+@neutral-light-warm: #F0EAE0;
+@neutral-light-cool: #E0EAF5;
+@neutral: #C0BCC8;
+@neutral-warm: #D0C8BC;
+@neutral-cool: #BCC8D4;
+@neutral-dim: #9894A0;
+@neutral-dim-warm: #A89C90;
+@neutral-dim-cool: #909CAC;
+@neutral-dark: #605C68;
+@neutral-dark-warm: #706458;
+@neutral-dark-cool: #546070;
+
+// -----------------------------------------------------------------------------
+// Shadows & Glows
+// -----------------------------------------------------------------------------
+
+@shadow-light: #403C48;
+@shadow: #302C38;
+@shadow-deep: #201C28;
+@shadow-darkest: #100C18;
+@shadow-purple: #241C30;
+@shadow-blue: #1C2430;
+@shadow-green: #1C2824;
+
+@glow-lavender: #F0E0FF;
+@glow-blue: #E0F0FF;
+@glow-gold: #FFF0D0;
+@glow-pink: #FFE0F0;
+@glow-white: #FFFFFF;
+
+// -----------------------------------------------------------------------------
+// Color Classes (for quick prototyping)
+// -----------------------------------------------------------------------------
+
+.bg-deep { background-color: @bg-deep; }
+.bg-deeper { background-color: @bg-deeper; }
+.bg-deepest { background-color: @bg-deepest; }
+.bg-dark { background-color: @bg-dark; }
+.bg-dark-warm { background-color: @bg-dark-warm; }
+.bg-dark-cool { background-color: @bg-dark-cool; }
+.bg-dark-purple { background-color: @bg-dark-purple; }
+.bg-dark-blue { background-color: @bg-dark-blue; }
+.bg-dark-green { background-color: @bg-dark-green; }
+.bg-medium { background-color: @bg-medium; }
+.bg-medium-warm { background-color: @bg-medium-warm; }
+.bg-medium-cool { background-color: @bg-medium-cool; }
+.bg-soft { background-color: @bg-soft; }
+.bg-soft-warm { background-color: @bg-soft-warm; }
+.bg-soft-cool { background-color: @bg-soft-cool; }
+.surface-dark { background-color: @surface-dark; }
+.surface-dark-warm { background-color: @surface-dark-warm; }
+.surface-dark-cool { background-color: @surface-dark-cool; }
+.surface { background-color: @surface; }
+.surface-warm { background-color: @surface-warm; }
+.surface-cool { background-color: @surface-cool; }
+.surface-light { background-color: @surface-light; }
+.surface-light-warm { background-color: @surface-light-warm; }
+.surface-light-cool { background-color: @surface-light-cool; }
+.text-primary { color: @text-primary; }
+.text-primary-warm { color: @text-primary-warm; }
+.text-primary-cool { color: @text-primary-cool; }
+.text-primary-amber { color: @text-primary-amber; }
+.text-primary-mint { color: @text-primary-mint; }
+.text-soft { color: @text-soft; }
+.text-soft-warm { color: @text-soft-warm; }
+.text-soft-cool { color: @text-soft-cool; }
+.text-soft-peach { color: @text-soft-peach; }
+.text-soft-lavender { color: @text-soft-lavender; }
+.text-muted { color: @text-muted; }
+.text-muted-warm { color: @text-muted-warm; }
+.text-muted-cool { color: @text-muted-cool; }
+.detail-lavender { color: @detail-lavender; }
+.detail-lavender-light { color: @detail-lavender-light; }
+.detail-lavender-dim { color: @detail-lavender-dim; }
+.detail-mist { color: @detail-mist; }
+.detail-mist-light { color: @detail-mist-light; }
+.detail-mist-dim { color: @detail-mist-dim; }
+.detail-pearl { color: @detail-pearl; }
+.detail-pearl-light { color: @detail-pearl-light; }
+.detail-pearl-dim { color: @detail-pearl-dim; }
+.detail-ice { color: @detail-ice; }
+.detail-ice-light { color: @detail-ice-light; }
+.detail-ice-dim { color: @detail-ice-dim; }
+.accent-lavender { color: @accent-lavender; }
+.accent-lavender-bright { color: @accent-lavender-bright; }
+.accent-lavender-deep { color: @accent-lavender-deep; }
+.accent-lilac { color: @accent-lilac; }
+.accent-lilac-bright { color: @accent-lilac-bright; }
+.accent-lilac-deep { color: @accent-lilac-deep; }
+.accent-plum { color: @accent-plum; }
+.accent-plum-bright { color: @accent-plum-bright; }
+.accent-plum-deep { color: @accent-plum-deep; }
+.accent-sky { color: @accent-sky; }
+.accent-sky-bright { color: @accent-sky-bright; }
+.accent-sky-deep { color: @accent-sky-deep; }
+.accent-corn { color: @accent-corn; }
+.accent-corn-bright { color: @accent-corn-bright; }
+.accent-corn-deep { color: @accent-corn-deep; }
+.accent-navy { color: @accent-navy; }
+.accent-navy-bright { color: @accent-navy-bright; }
+.accent-navy-deep { color: @accent-navy-deep; }
+.accent-mint { color: @accent-mint; }
+.accent-mint-bright { color: @accent-mint-bright; }
+.accent-mint-deep { color: @accent-mint-deep; }
+.accent-emerald { color: @accent-emerald; }
+.accent-emerald-bright { color: @accent-emerald-bright; }
+.accent-emerald-deep { color: @accent-emerald-deep; }
+.accent-forest { color: @accent-forest; }
+.accent-forest-bright { color: @accent-forest-bright; }
+.accent-forest-deep { color: @accent-forest-deep; }
+.accent-peach { color: @accent-peach; }
+.accent-peach-bright { color: @accent-peach-bright; }
+.accent-peach-deep { color: @accent-peach-deep; }
+.accent-coral { color: @accent-coral; }
+.accent-coral-bright { color: @accent-coral-bright; }
+.accent-coral-deep { color: @accent-coral-deep; }
+.accent-rose { color: @accent-rose; }
+.accent-rose-bright { color: @accent-rose-bright; }
+.accent-rose-deep { color: @accent-rose-deep; }
+.accent-champagne { color: @accent-champagne; }
+.accent-champagne-bright { color: @accent-champagne-bright; }
+.accent-champagne-deep { color: @accent-champagne-deep; }
+.accent-bronze { color: @accent-bronze; }
+.accent-bronze-bright { color: @accent-bronze-bright; }
+.accent-bronze-deep { color: @accent-bronze-deep; }
+.accent-stone { color: @accent-stone; }
+.accent-stone-bright { color: @accent-stone-bright; }
+.accent-stone-deep { color: @accent-stone-deep; }
+.gem-amethyst { color: @gem-amethyst; }
+.gem-amethyst-bright { color: @gem-amethyst-bright; }
+.gem-amethyst-deep { color: @gem-amethyst-deep; }
+.gem-ruby { color: @gem-ruby; }
+.gem-ruby-bright { color: @gem-ruby-bright; }
+.gem-ruby-deep { color: @gem-ruby-deep; }
+.gem-sapphire { color: @gem-sapphire; }
+.gem-sapphire-bright { color: @gem-sapphire-bright; }
+.gem-sapphire-deep { color: @gem-sapphire-deep; }
+.gem-emerald { color: @gem-emerald; }
+.gem-emerald-bright { color: @gem-emerald-bright; }
+.gem-emerald-deep { color: @gem-emerald-deep; }
+.gem-topaz { color: @gem-topaz; }
+.gem-topaz-bright { color: @gem-topaz-bright; }
+.gem-topaz-deep { color: @gem-topaz-deep; }
+.gem-opal { color: @gem-opal; }
+.gem-opal-bright { color: @gem-opal-bright; }
+.gem-opal-deep { color: @gem-opal-deep; }
+.metal-gold { color: @metal-gold; }
+.metal-gold-bright { color: @metal-gold-bright; }
+.metal-gold-deep { color: @metal-gold-deep; }
+.metal-silver { color: @metal-silver; }
+.metal-silver-bright { color: @metal-silver-bright; }
+.metal-silver-deep { color: @metal-silver-deep; }
+.metal-copper { color: @metal-copper; }
+.metal-copper-bright { color: @metal-copper-bright; }
+.metal-copper-deep { color: @metal-copper-deep; }
+.metal-platinum { color: @metal-platinum; }
+.metal-platinum-dim { color: @metal-platinum-dim; }
+.metal-rosegold { color: @metal-rosegold; }
+.metal-rosegold-bright { color: @metal-rosegold-bright; }
+.metal-rosegold-deep { color: @metal-rosegold-deep; }
+.earth-clay { color: @earth-clay; }
+.earth-clay-bright { color: @earth-clay-bright; }
+.earth-clay-deep { color: @earth-clay-deep; }
+.earth-sienna { color: @earth-sienna; }
+.earth-sienna-bright { color: @earth-sienna-bright; }
+.earth-sienna-deep { color: @earth-sienna-deep; }
+.earth-umber { color: @earth-umber; }
+.earth-umber-bright { color: @earth-umber-bright; }
+.earth-umber-deep { color: @earth-umber-deep; }
+.earth-ochre { color: @earth-ochre; }
+.earth-ochre-bright { color: @earth-ochre-bright; }
+.earth-ochre-deep { color: @earth-ochre-deep; }
+.earth-terra { color: @earth-terra; }
+.earth-terra-bright { color: @earth-terra-bright; }
+.earth-terra-deep { color: @earth-terra-deep; }
+.twilight-purple { color: @twilight-purple; }
+.twilight-purple-bright { color: @twilight-purple-bright; }
+.twilight-purple-deep { color: @twilight-purple-deep; }
+.twilight-blue { color: @twilight-blue; }
+.twilight-blue-bright { color: @twilight-blue-bright; }
+.twilight-blue-deep { color: @twilight-blue-deep; }
+.twilight-pink { color: @twilight-pink; }
+.twilight-pink-bright { color: @twilight-pink-bright; }
+.twilight-pink-deep { color: @twilight-pink-deep; }
+.twilight-gold { color: @twilight-gold; }
+.twilight-gold-bright { color: @twilight-gold-bright; }
+.twilight-gold-deep { color: @twilight-gold-deep; }
+.aurora-green { color: @aurora-green; }
+.aurora-green-bright { color: @aurora-green-bright; }
+.aurora-green-deep { color: @aurora-green-deep; }
+.aurora-blue { color: @aurora-blue; }
+.aurora-blue-bright { color: @aurora-blue-bright; }
+.aurora-blue-deep { color: @aurora-blue-deep; }
+.aurora-pink { color: @aurora-pink; }
+.aurora-pink-bright { color: @aurora-pink-bright; }
+.aurora-pink-deep { color: @aurora-pink-deep; }
+.neutral-white { color: @neutral-white; }
+.neutral-offwhite { color: @neutral-offwhite; }
+.neutral-light { color: @neutral-light; }
+.neutral-light-warm { color: @neutral-light-warm; }
+.neutral-light-cool { color: @neutral-light-cool; }
+.neutral { color: @neutral; }
+.neutral-warm { color: @neutral-warm; }
+.neutral-cool { color: @neutral-cool; }
+.neutral-dim { color: @neutral-dim; }
+.neutral-dim-warm { color: @neutral-dim-warm; }
+.neutral-dim-cool { color: @neutral-dim-cool; }
+.neutral-dark { color: @neutral-dark; }
+.neutral-dark-warm { color: @neutral-dark-warm; }
+.neutral-dark-cool { color: @neutral-dark-cool; }
+.shadow-light { color: @shadow-light; }
+.shadow { color: @shadow; }
+.shadow-deep { color: @shadow-deep; }
+.shadow-darkest { color: @shadow-darkest; }
+.shadow-purple { color: @shadow-purple; }
+.shadow-blue { color: @shadow-blue; }
+.shadow-green { color: @shadow-green; }
+.glow-lavender { color: @glow-lavender; }
+.glow-blue { color: @glow-blue; }
+.glow-gold { color: @glow-gold; }
+.glow-pink { color: @glow-pink; }
+.glow-white { color: @glow-white; }
+
+// Background utility classes (if you prefer bg-* prefixes for all)
+.bg-surface-dark { background-color: @surface-dark; }
+.bg-surface-dark-warm { background-color: @surface-dark-warm; }
+.bg-surface-dark-cool { background-color: @surface-dark-cool; }
+.bg-surface { background-color: @surface; }
+.bg-surface-warm { background-color: @surface-warm; }
+.bg-surface-cool { background-color: @surface-cool; }
+.bg-surface-light { background-color: @surface-light; }
+.bg-surface-light-warm { background-color: @surface-light-warm; }
+.bg-surface-light-cool { background-color: @surface-light-cool; }
