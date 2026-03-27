@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUE — Image Color Editor (Replacement) </title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --border: #1e1e2e;
+    --accent: #f5a977;
+    --accent2: #9aff6b;
+    --text: #f0f0f0;
+    --muted: #555570;
+    --panel: #0f0f18;
+  }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,240,96,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,240,96,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Vivaldi', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+  }
+
+  .logo span { color: var(--text); }
+
+  .tagline {
+    font-family: 'Brush Script MT';
+    font-size: 24px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .main {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    height: calc(100vh - 73px);
+  }
+
+  /* CANVAS AREA */
+  .canvas-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone {
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 4/3;
+    border: 2px dashed var(--border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(200,240,96,0.03);
+  }
+
+  .drop-zone.has-image {
+    border-style: solid;
+    border-color: var(--border);
+  }
+
+  .drop-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  .drop-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .drop-sub {
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0.6;
+    letter-spacing: 1px;
+  }
+
+  #preview-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+  }
+
+  .canvas-overlay {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: none;
+    gap: 8px;
+  }
+
+  .canvas-overlay.visible { display: flex; }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: #0a0a0f;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .btn-accent:hover {
+    background: #d9ff6e;
+    color: #0a0a0f;
+    border-color: #d9ff6e;
+  }
+
+  /* SIDE PANEL */
+  .panel {
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .panel-section {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* SLIDERS */
+  .slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slider-name {
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .slider-value {
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 40px;
+    text-align: right;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 0;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+  }
+
+  #hue-slider { background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); }
+  #sat-slider { background: linear-gradient(to right, #555, #c8f060); }
+  #bright-slider { background: linear-gradient(to right, #000, #fff); }
+  #contrast-slider { background: linear-gradient(to right, #888, #fff); }
+
+  /* PALETTE PICKER */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .palette-swatch {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .palette-swatch:hover { transform: scale(1.1); border-color: white; }
+  .palette-swatch.active { border-color: var(--accent); }
+
+  .palette-swatch .remove {
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 14px; height: 14px;
+    background: var(--accent2);
+    border-radius: 50%;
+    font-size: 9px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+  }
+
+  .palette-swatch:hover .remove { display: flex; }
+
+  .color-add {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    border: 2px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .color-add:hover { border-color: var(--accent); color: var(--accent); }
+
+  #color-input { display: none; }
+
+  /* PRESETS */
+  .presets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .preset {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .preset:hover { border-color: var(--accent); }
+  .preset.active { border-color: var(--accent); background: rgba(200,240,96,0.05); }
+
+  .preset-name {
+    font-size: 11px;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .preset-colors {
+    display: flex;
+    gap: 3px;
+  }
+
+  .preset-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* EXPORT */
+  .export-section {
+    padding: 24px;
+    margin-top: auto;
+  }
+
+  .export-section .btn-accent {
+    width: 100%;
+    padding: 14px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .export-formats {
+    display: flex;
+    gap: 8px;
+  }
+
+  .export-formats .btn {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  /* NO IMAGE STATE */
+  .no-image-panel {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    opacity: 0.4;
+  }
+
+  .no-image-panel p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  #hidden-input { display: none; }
+
+  canvas { display: block; }
+
+  /* Custom scrollbar */
+  .panel::-webkit-scrollbar { width: 4px; }
+  .panel::-webkit-scrollbar-track { background: var(--panel); }
+  .panel::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .reset-btn {
+    font-size: 10px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 0;
+    transition: color 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .reset-btn:hover { color: var(--accent2); }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .toggle-label { font-size: 12px; color: var(--text); }
+
+  .toggle {
+    width: 36px; height: 18px;
+    background: var(--border);
+    border-radius: 9px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle.on { background: var(--accent); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    background: white;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: left 0.2s;
+  }
+
+  .toggle.on::after { left: 21px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Hropiberhtaz</div>
+  <div class="tagline">Mango</div>
+</header>
+
+<div class="main">
+  <!-- CANVAS AREA -->
+  <div class="canvas-area">
+    <div class="drop-zone" id="drop-zone">
+      <div class="drop-icon">◈</div>
+      <div class="drop-text">Drop image here</div>
+      <div class="drop-sub">PNG · JPG · WEBP · GIF</div>
+      <canvas id="preview-canvas"></canvas>
+    </div>
+    <div class="canvas-overlay" id="canvas-overlay">
+      <button class="btn" onclick="resetAll()">Reset</button>
+      <button class="btn" onclick="document.getElementById('hidden-input').click()">New Image</button>
+    </div>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div class="panel" id="panel">
+    <div class="no-image-panel" id="no-image-msg">
+      <div style="font-size:40px;margin-bottom:16px;opacity:0.3">◈</div>
+      <p>Upload an image to start editing its colors</p>
+    </div>
+
+    <div id="controls" style="display:none">
+
+      <!-- ADJUSTMENTS -->
+      <div class="panel-section">
+        <div class="section-label">Adjustments</div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Hue Rotate</span>
+            <span class="slider-value" id="hue-val">0°</span>
+          </div>
+          <input type="range" id="hue-slider" min="0" max="360" value="0" oninput="updateFilter()">
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Saturation</span>
+            <span class="slider-value" id="sat-val">100%</span>
+          </div>
+          <input type="range" id="sat-slider" min="0" max="300" value="100" oninput="updateFilter()">
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Brightness</span>
+            <span class="slider-value" id="bright-val">100%</span>
+          </div>
+          <input type="range" id="bright-slider" min="10" max="300" value="100" oninput="updateFilter()">
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Contrast</span>
+            <span class="slider-value" id="contrast-val">100%</span>
+          </div>
+          <input type="range" id="contrast-slider" min="0" max="300" value="100" oninput="updateFilter()">
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Sepia</span>
+            <span class="slider-value" id="sepia-val">0%</span>
+          </div>
+          <input type="range" id="sepia-slider" min="0" max="100" value="0" oninput="updateFilter()">
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-name">Invert</span>
+            <span class="slider-value" id="invert-val">0%</span>
+          </div>
+          <input type="range" id="invert-slider" min="0" max="100" value="0" oninput="updateFilter()">
+        </div>
+
+        <button class="reset-btn" onclick="resetSliders()">↺ Reset adjustments</button>
+      </div>
+
+      <!-- PRESETS -->
+      <div class="panel-section">
+        <div class="section-label">Presets</div>
+        <div class="presets-grid" id="presets-grid"></div>
+      </div>
+
+      <!-- EXPORT -->
+      <div class="export-section">
+        <button class="btn btn-accent" onclick="exportImage('png')">↓ Download PNG</button>
+        <div class="export-formats">
+          <button class="btn" onclick="exportImage('jpeg')">JPG</button>
+          <button class="btn" onclick="exportImage('webp')">WEBP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="hidden-input" accept="image/*" onchange="loadImage(event)">
+
+<script>
+  let originalImage = null;
+  let currentFilter = {};
+
+  const presets = [
+    { name: 'Golden Hour', hue: 20, sat: 150, bright: 110, contrast: 110, sepia: 30, invert: 0, colors: ['#ff9a3c','#ffcc70','#e05f00','#ffe0a0','#ff6b00'] },
+    { name: 'Neon Night', hue: 200, sat: 250, bright: 90, contrast: 130, sepia: 0, invert: 0, colors: ['#0ff','#f0f','#00f','#0f0','#ff0'] },
+    { name: 'Retro Film', hue: 10, sat: 70, bright: 95, contrast: 85, sepia: 60, invert: 0, colors: ['#c8a87a','#a07850','#ffe8c0','#704830','#d8c0a0'] },
+    { name: 'Cyanotype', hue: 220, sat: 180, bright: 100, contrast: 110, sepia: 0, invert: 0, colors: ['#003060','#0060b0','#1090e0','#a0d0f0','#e0f0ff'] },
+    { name: 'Infrared', hue: 330, sat: 200, bright: 105, contrast: 120, sepia: 0, invert: 0, colors: ['#ff0066','#ff80b0','#330020','#ff99cc','#660040'] },
+    { name: 'Acid Trip', hue: 120, sat: 300, bright: 105, contrast: 140, sepia: 0, invert: 0, colors: ['#00ff44','#ff4400','#ffff00','#8800ff','#00ffff'] },
+  ];
+
+  function buildPresets() {
+    const grid = document.getElementById('presets-grid');
+    grid.innerHTML = '';
+    presets.forEach((p, i) => {
+      const el = document.createElement('div');
+      el.className = 'preset';
+      el.id = `preset-${i}`;
+      el.innerHTML = `
+        <div class="preset-name">${p.name}</div>
+        <div class="preset-colors">${p.colors.map(c => `<div class="preset-dot" style="background:${c}"></div>`).join('')}</div>
+      `;
+      el.onclick = () => applyPreset(p, i);
+      grid.appendChild(el);
+    });
+  }
+
+  function applyPreset(p, idx) {
+    document.getElementById('hue-slider').value = p.hue;
+    document.getElementById('sat-slider').value = p.sat;
+    document.getElementById('bright-slider').value = p.bright;
+    document.getElementById('contrast-slider').value = p.contrast;
+    document.getElementById('sepia-slider').value = p.sepia;
+    document.getElementById('invert-slider').value = p.invert;
+    document.querySelectorAll('.preset').forEach(el => el.classList.remove('active'));
+    document.getElementById(`preset-${idx}`).classList.add('active');
+    updateFilter();
+  }
+
+  function loadImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        originalImage = img;
+        const dropZone = document.getElementById('drop-zone');
+        const canvas = document.getElementById('preview-canvas');
+        canvas.style.display = 'block';
+        dropZone.querySelector('.drop-icon').style.display = 'none';
+        dropZone.querySelector('.drop-text').style.display = 'none';
+        dropZone.querySelector('.drop-sub').style.display = 'none';
+        dropZone.classList.add('has-image');
+
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        document.getElementById('no-image-msg').style.display = 'none';
+        document.getElementById('controls').style.display = 'block';
+        document.getElementById('canvas-overlay').classList.add('visible');
+        buildPresets();
+        updateFilter();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function updateFilter() {
+    if (!originalImage) return;
+
+    const hue = document.getElementById('hue-slider').value;
+    const sat = document.getElementById('sat-slider').value;
+    const bright = document.getElementById('bright-slider').value;
+    const contrast = document.getElementById('contrast-slider').value;
+    const sepia = document.getElementById('sepia-slider').value;
+    const invert = document.getElementById('invert-slider').value;
+
+    document.getElementById('hue-val').textContent = `${hue}°`;
+    document.getElementById('sat-val').textContent = `${sat}%`;
+    document.getElementById('bright-val').textContent = `${bright}%`;
+    document.getElementById('contrast-val').textContent = `${contrast}%`;
+    document.getElementById('sepia-val').textContent = `${sepia}%`;
+    document.getElementById('invert-val').textContent = `${invert}%`;
+
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+
+    ctx.filter = `hue-rotate(${hue}deg) saturate(${sat}%) brightness(${bright}%) contrast(${contrast}%) sepia(${sepia}%) invert(${invert}%)`;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(originalImage, 0, 0);
+  }
+
+  function resetSliders() {
+    document.getElementById('hue-slider').value = 0;
+    document.getElementById('sat-slider').value = 100;
+    document.getElementById('bright-slider').value = 100;
+    document.getElementById('contrast-slider').value = 100;
+    document.getElementById('sepia-slider').value = 0;
+    document.getElementById('invert-slider').value = 0;
+    document.querySelectorAll('.preset').forEach(el => el.classList.remove('active'));
+    updateFilter();
+  }
+
+  function resetAll() {
+    resetSliders();
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.filter = 'none';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(originalImage, 0, 0);
+  }
+
+  function exportImage(format) {
+    const sourceCanvas = document.getElementById('preview-canvas');
+
+    // Draw filtered image to a clean canvas for export
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = sourceCanvas.width;
+    exportCanvas.height = sourceCanvas.height;
+    const ctx = exportCanvas.getContext('2d');
+
+    const hue = document.getElementById('hue-slider').value;
+    const sat = document.getElementById('sat-slider').value;
+    const bright = document.getElementById('bright-slider').value;
+    const contrast = document.getElementById('contrast-slider').value;
+    const sepia = document.getElementById('sepia-slider').value;
+    const invert = document.getElementById('invert-slider').value;
+
+    ctx.filter = `hue-rotate(${hue}deg) saturate(${sat}%) brightness(${bright}%) contrast(${contrast}%) sepia(${sepia}%) invert(${invert}%)`;
+    ctx.drawImage(originalImage, 0, 0);
+
+    const mimeType = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
+    const quality = format === 'jpeg' ? 0.92 : 0.95;
+
+    exportCanvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hue-edited.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, mimeType, quality);
+  }
+
+  // DRAG & DROP – single click handler (no inline onclick)
+  const dropZone = document.getElementById('drop-zone');
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-over');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const fakeEvent = { target: { files: [file] } };
+      loadImage(fakeEvent);
+    }
+  });
+
+  // Click handler: open file picker only when clicking the placeholder content
+  dropZone.addEventListener('click', (e) => {
+    // If an image is loaded, the canvas covers the zone – we don't want to reopen the picker.
+    if (originalImage) return;
+
+    // Only trigger if the click is on the drop zone itself or its instructional children.
+    if (e.target === dropZone || 
+        e.target.classList.contains('drop-icon') ||
+        e.target.classList.contains('drop-text') ||
+        e.target.classList.contains('drop-sub')) {
+      document.getElementById('hidden-input').click();
+    }
+  });
+</script>
+</body>
+</html>

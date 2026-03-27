@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Cursor Chase Lines | Slow Lag</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            min-height: 100vh;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Trail positions array
+        let trail = [];
+        
+        // Trail length
+        const TRAIL_LENGTH = 80;
+        
+        // Actual mouse position
+        let actualMouseX = window.innerWidth / 2;
+        let actualMouseY = window.innerHeight / 2;
+        
+        // Lagged mouse position that follows actual mouse with a delay
+        let chaseMouseX = actualMouseX;
+        let chaseMouseY = actualMouseY;
+        
+        // Lerp factor for slower chasing (very slow now)
+        const LERP_SPEED = 0.025;  // even slower chase
+        
+        // Colors for each line
+        const colors = [
+            { h: 0, s: 85, l: 65 },
+            { h: 45, s: 85, l: 65 },
+            { h: 180, s: 80, l: 60 },
+            { h: 280, s: 75, l: 70 }
+        ];
+        
+        const NUM_LINES = 4;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        function initTrail() {
+            trail = [];
+            for (let i = 0; i < TRAIL_LENGTH; i++) {
+                trail.push({ x: chaseMouseX, y: chaseMouseY });
+            }
+        }
+        
+        function updateTrail() {
+            trail.unshift({ x: chaseMouseX, y: chaseMouseY });
+            trail.pop();
+        }
+        
+        function drawSegment(x1, y1, x2, y2, color, width, glowIntensity = 0.5) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowBlur = 8 + glowIntensity * 6;
+            ctx.shadowColor = color;
+            ctx.stroke();
+        }
+        
+        function drawLines() {
+            if (trail.length < 2) return;
+            
+            for (let lineIdx = 0; lineIdx < NUM_LINES; lineIdx++) {
+                const offset = Math.floor((lineIdx + 1) * (TRAIL_LENGTH / (NUM_LINES + 1)));
+                const step = Math.max(1, Math.floor(TRAIL_LENGTH / 8) + lineIdx * 2);
+                const col = colors[lineIdx % colors.length];
+                const lineWidth = 3.5 - lineIdx * 0.5;
+                
+                for (let i = 0; i < trail.length - step; i += step) {
+                    const point1 = trail[i];
+                    const point2 = trail[i + step];
+                    if (point1 && point2) {
+                        const progress = i / trail.length;
+                        const alpha = Math.max(0.3, 0.9 - progress * 0.7);
+                        const glowStrength = 0.8 - progress * 0.5;
+                        const colorWithAlpha = `hsla(${col.h}, ${col.s}%, ${col.l + (1 - progress) * 20}%, ${alpha})`;
+                        const widthFade = lineWidth * (1 - progress * 0.6);
+                        drawSegment(point1.x, point1.y, point2.x, point2.y, colorWithAlpha, widthFade, glowStrength);
+                    }
+                }
+            }
+            
+            // Additional connecting lines
+            for (let layer = 1; layer <= 3; layer++) {
+                const offset = Math.floor(TRAIL_LENGTH / 4) * layer;
+                const col = colors[layer % colors.length];
+                for (let i = 0; i < trail.length - offset - 1; i += 2) {
+                    const point1 = trail[i];
+                    const point2 = trail[i + offset];
+                    if (point1 && point2) {
+                        const distance = Math.hypot(point1.x - point2.x, point1.y - point2.y);
+                        if (distance < 150) {
+                            const progress = i / trail.length;
+                            const alpha = 0.4 * (1 - progress);
+                            ctx.beginPath();
+                            ctx.moveTo(point1.x, point1.y);
+                            ctx.lineTo(point2.x, point2.y);
+                            ctx.strokeStyle = `hsla(${col.h}, ${col.s}%, ${col.l}%, ${alpha})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.shadowBlur = 4;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+        }
+        
+        function drawCursor() {
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#ff6b6b";
+            ctx.beginPath();
+            ctx.arc(actualMouseX, actualMouseY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 107, 107, 0.4)";
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(actualMouseX, actualMouseY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 200, 100, 0.9)";
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(actualMouseX, actualMouseY, 2, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            ctx.beginPath();
+            ctx.arc(actualMouseX, actualMouseY, 12 + Math.sin(Date.now() * 0.008) * 2, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(255, 107, 107, 0.6)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+        
+        function animate() {
+            // Update lagged mouse position (slow chase)
+            chaseMouseX += (actualMouseX - chaseMouseX) * LERP_SPEED;
+            chaseMouseY += (actualMouseY - chaseMouseY) * LERP_SPEED;
+            
+            // Clear canvas completely — no trail effect
+            ctx.fillStyle = "#0a0a0f";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw lines
+            updateTrail();
+            drawLines();
+            drawCursor();
+            
+            requestAnimationFrame(animate);
+        }
+        
+        function onMouseMove(e) {
+            actualMouseX = e.clientX;
+            actualMouseY = e.clientY;
+        }
+        
+        function onTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            if (touch) {
+                actualMouseX = touch.clientX;
+                actualMouseY = touch.clientY;
+            }
+        }
+        
+        function onTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            if (touch) {
+                actualMouseX = touch.clientX;
+                actualMouseY = touch.clientY;
+            }
+        }
+        
+        function onResize() {
+            resizeCanvas();
+            initTrail();
+        }
+        
+        function init() {
+            resizeCanvas();
+            initTrail();
+            
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onResize);
+            canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+            canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+            
+            animate();
+        }
+        
+        init();
+    </script>
+</body>
+</html>
