@@ -11,16 +11,6 @@
 
 ### *& some cool SVGs too*
 
-<br>
-
-![stars](https://img.shields.io/github/stars/SleepyCatHey?style=flat-square&color=ffcc00&labelColor=1a1a2e)
-&nbsp;
-![license](https://img.shields.io/badge/license-free%20to%20use-brightgreen?style=flat-square&labelColor=1a1a2e)
-&nbsp;
-![vibes](https://img.shields.io/badge/vibes-immaculate-%23ff6b9d?style=flat-square&labelColor=1a1a2e)
-&nbsp;
-![names](https://img.shields.io/badge/names-kinda%20dumb-%23a78bfa?style=flat-square&labelColor=1a1a2e)
-
 </div>
 
 ---
